@@ -160,18 +160,17 @@ app.get("/directors/:directorId/movies", async (request, response) => {
     SELECT
         movie_name
     FROM
-        movie
-    NATURAL JOIN
-        director;    
+        movie   
     WHERE 
-        movie.director_id = '${directorId}';      
+        director_id = '${directorId}';      
     `;
 
   const moviesOfDirectorArray = await db.all(getAllMoviesOfDirector);
-  const movOfDirArrResObj = convertArrOfDBObjectToResponseObj(
-    moviesOfDirectorArray
+  response.send(
+    moviesOfDirectorArray.map((eachMovieObj) => ({
+      movieName: eachMovieObj.movie_name,
+    }))
   );
-  response.send(movOfDirArrResObj);
 });
 
 //movie table
